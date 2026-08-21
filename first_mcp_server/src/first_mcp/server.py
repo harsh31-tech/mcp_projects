@@ -1,4 +1,6 @@
-from fastmcp import FastMCP
+from fastmcp import FastMCP , Context
+from fastmcp.prompts import Message
+
 
 mcp = FastMCP(name="first_server")
 
@@ -58,6 +60,57 @@ def debug_code(code: str) -> str:
                 resolve the logical , syntax and other mistakes
 
             """
+#myltiple inputs in prompt
+@mcp.prompt
+def code_review(code:str,
+                language :str,
+                focus:str)->str:
+    """ create a prompt to review the code """
+    return f""" you are a senior developer 
+                review the following code
+                {code}
+                it is based on the lanaguage {language} 
+                and output is foused on {focus}"""
+                
+# using python message object to parse the message 
+@mcp.prompt
+def structured_prompt(code:str)->list[Message]:
+    """ create a structured prompt """
+    return [
+        Message(
+            role="system",
+            content = "you are a expert python devloper ", 
+        ),
+        Message(
+            role = "user",
+            content = f"analyze the code of python {code}"
+        )
+    ]
+
+# learning context
+
+@mcp.tool
+async def process_data(data:str, ctx:Context)->str:
+    """ process data and demonstrate mcp context """
+    await ctx.info(f"processing {data}")
+    
+    return f"proccessed {data}"
+
+@mcp.tool
+async def generate_code(project_name : str , ctx : Context)->str:
+    """generate the backend project"""
+    
+    await ctx.info("validation project structure")
+
+    await ctx.info("Creating project structure")
+
+    await ctx.info("Generating API routes")
+
+    await ctx.info("Generating database layer")
+
+    await ctx.info("Generating authentication")
+    
+    return f"the backend project is created {project_name}"
 
 
 if __name__ == "__main__":
