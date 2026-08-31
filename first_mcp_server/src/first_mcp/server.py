@@ -63,7 +63,7 @@ def debug_code(code: str) -> str:
             """
 
 
-# myltiple inputs in prompt
+# multiple inputs in prompt
 @mcp.prompt
 def code_review(code: str, language: str, focus: str) -> str:
     """create a prompt to review the code"""
@@ -142,6 +142,19 @@ async def generation_progress(project_name: str, ctx: Context) -> str:
     await ctx.report_progress(5, 5)
 
     return f"the backend project is generated{project_name}"
+
+
+@mcp.resource("config://app")
+def app_config() -> str:
+    """app environment variable"""
+    return "env = development"
+
+
+@mcp.tool
+async def read_env(ctx: Context) -> str:
+    """read application config"""
+    config = await ctx.read_resource("config://app")
+    return str(config)
 
 
 if __name__ == "__main__":
