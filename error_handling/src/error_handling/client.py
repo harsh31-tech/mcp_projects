@@ -4,7 +4,7 @@ from fastmcp import Client
 
 
 async def main():
-    client = Client("server.py")
+    client = Client("src/error_handling/server.py")
 
     # async with client:
     #     try:
@@ -16,7 +16,13 @@ async def main():
     async with client:
         username = await client.call_tool(
             "create_user",
-            {"user": {"name": "harsh", "email": "harsh@gmail.com", "age": 18}},
+            {
+                "user": {
+                    "name": "harsh",
+                    "email": "harsh@gmail.com",
+                    "database": "mongodb",
+                }
+            },
         )
         print(username)
 

@@ -1,14 +1,21 @@
 from fastmcp import FastMCP, Context
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
+from enum import Enum
 import asyncio
 
 mcp = FastMCP(name="error handling server")
 
 
+class Database(str, Enum):
+    POSTGRES = "postgres"
+    MYSQL = "mysql"
+    MONGODB = "mongodb"
+
+
 class User(BaseModel):
     name: str
-    age: int
-    email: str
+    database: Database
+    email: EmailStr
 
 
 # @mcp.tool
@@ -23,7 +30,7 @@ class User(BaseModel):
 @mcp.tool
 def create_user(user: User) -> str:
     """create a user"""
-    return f"user {user.email} of age {user.age} is created successfully"
+    return f"user {user.email} of  {user.database} is created successfully"
 
 
 if __name__ == "__main__":
