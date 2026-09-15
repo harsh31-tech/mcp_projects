@@ -13,18 +13,27 @@ async def main():
     #     except Exception as e:
     #         print("tool failed :", e)
 
+    # async with client:
+    #     username = await client.call_tool(
+    #         "create_user",
+    #         {
+    #             "user": {
+    #                 "name": "harsh",
+    #                 "email": "harsh@gmail.com",
+    #                 "database": "mongodb",
+    #             }
+    #         },
+    #     )
+    #     print(username)
+
     async with client:
-        username = await client.call_tool(
-            "create_user",
-            {
-                "user": {
-                    "name": "harsh",
-                    "email": "harsh@gmail.com",
-                    "database": "mongodb",
-                }
-            },
-        )
-        print(username)
+        slow = await client.call_tool("slow_task")
+        fast = await client.call_tool("fast_task")
+        print(slow)
+        print(fast)
+        # result = await asyncio.gather(slow,fast)
+        # print(result)
+       
 
 
 if __name__ == "__main__":

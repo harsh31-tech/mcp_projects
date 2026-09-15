@@ -6,16 +6,16 @@ import asyncio
 mcp = FastMCP(name="error handling server")
 
 
-class Database(str, Enum):
-    POSTGRES = "postgres"
-    MYSQL = "mysql"
-    MONGODB = "mongodb"
+# class Database(str, Enum):
+#     POSTGRES = "postgres"
+#     MYSQL = "mysql"
+#     MONGODB = "mongodb"
 
 
-class User(BaseModel):
-    name: str
-    database: Database
-    email: EmailStr
+# class User(BaseModel):
+#     name: str
+#     database: Database
+#     email: EmailStr
 
 
 # @mcp.tool
@@ -27,10 +27,24 @@ class User(BaseModel):
 #     return a / b
 
 
+# @mcp.tool
+# def create_user(user: User) -> str:
+#     """create a user"""
+#     return f"user {user.email} of  {user.database} is created successfully"
+
+
 @mcp.tool
-def create_user(user: User) -> str:
-    """create a user"""
-    return f"user {user.email} of  {user.database} is created successfully"
+async def slow_task() -> str:
+    """a slow asyncrohnous task"""
+    await asyncio.sleep(5)
+    return "slow task completed"
+
+
+@mcp.tool
+async def fast_task() -> str:
+    """a slow asyncrohnous task"""
+    await asyncio.sleep(5)
+    return "fast task completed"
 
 
 if __name__ == "__main__":
