@@ -36,6 +36,12 @@ async def main():
     async with client:
         server = await client.read_resource("server://status")
         print(server)
+        
+        templates = await client.list_resource_templates()
+        print(templates)
+        
+        resources = await client.list_resources()
+        print(resources)
 
 
 if __name__ == "__main__":
