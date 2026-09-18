@@ -47,14 +47,20 @@ async def fast_task() -> str:
     return "fast task completed"
 
 
+# @mcp.resource("server://status")
+# def server_status() -> str:
+#     """status of the server"""
+#     return """
+#     environment = development
+#     version = 1.0
+#     status = healthy
+#     """
+
+
 @mcp.resource("server://status")
-def server_status() -> str:
+def server_status() -> dict:
     """status of the server"""
-    return """
-    environment = development
-    version = 1.0
-    status = healthy 
-    """
+    return {"environment": "development", "version": "1.0", "status": "healthy"}
 
 
 @mcp.resource("user://{username}")
