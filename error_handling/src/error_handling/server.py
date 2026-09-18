@@ -47,5 +47,20 @@ async def fast_task() -> str:
     return "fast task completed"
 
 
+@mcp.resource("server://status")
+def server_status() -> str:
+    """status of the server"""
+    return """
+    environment = development
+    version = 1.0
+    status = healthy 
+    """
+
+
+@mcp.resource("user://{username}")
+def user_profile(username: str) -> str:
+    return f"server status asked by {username}"
+
+
 if __name__ == "__main__":
     mcp.run()

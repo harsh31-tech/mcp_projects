@@ -26,14 +26,16 @@ async def main():
     #     )
     #     print(username)
 
+    # async with client:
+    #     slow = await client.call_tool("slow_task")
+    #     fast = await client.call_tool("fast_task")
+    #     print(slow)
+    #     print(fast)
+    # result = await asyncio.gather(slow,fast)
+    # print(result)
     async with client:
-        slow = await client.call_tool("slow_task")
-        fast = await client.call_tool("fast_task")
-        print(slow)
-        print(fast)
-        # result = await asyncio.gather(slow,fast)
-        # print(result)
-       
+        server = await client.read_resource("server://status")
+        print(server)
 
 
 if __name__ == "__main__":
