@@ -68,5 +68,9 @@ def user_profile(username: str) -> str:
     return f"server status asked by {username}"
 
 
+@mcp.prompt
+def analyze():
+    return """analyze the code which is given by the user"""
+
 if __name__ == "__main__":
     mcp.run()

@@ -34,14 +34,11 @@ async def main():
     # result = await asyncio.gather(slow,fast)
     # print(result)
     async with client:
-        server = await client.read_resource("server://status")
-        print(server)
+        prompts = await client.list_prompts()
+        print(prompts)
         
-        templates = await client.list_resource_templates()
-        print(templates)
-        
-        resources = await client.list_resources()
-        print(resources)
+        prompt = await client.get_prompt("analyze")
+        print(prompt)
 
 
 if __name__ == "__main__":
