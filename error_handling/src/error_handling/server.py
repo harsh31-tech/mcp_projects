@@ -44,7 +44,7 @@ class TimingMiddleware(
 
     async def on_call_tool(self, context, call_next):
 
-        if context.message.name not in self.target_tools:
+        if context.message.name not in self.target_tools: # conditon is checked whether tool name is in target_tools or not
             return await call_next(context)
 
         start = time.time()
@@ -58,7 +58,7 @@ class TimingMiddleware(
         return result
 
 
-mcp.add_middleware(TimingMiddleware(target_tools={"add"}))
+mcp.add_middleware(TimingMiddleware(target_tools={"add"})) # tools name is specified here
 
 
 @mcp.tool
