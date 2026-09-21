@@ -1,21 +1,45 @@
 from fastmcp import FastMCP, Context
 from fastmcp.server.middleware import Middleware
+
 from pydantic import BaseModel, EmailStr
 from enum import Enum
 from contextlib import asynccontextmanager
 import asyncio
+import time
 
 mcp = FastMCP(name="error-handling-server")
 
 
-async def middleware(context, call_next): #basic structure of creating middleware 
-    print("before")
+# async def middleware(context, call_next): #basic structure of creating middleware
+#     print("before")
 
-    result = await call_next(context)
+#     result = await call_next(context)
 
-    print("after")
+#     print("after")
 
-    return result
+#     return result
+
+
+class TimingMiddleware(Middleware):
+    async def on_call_tool(self, context, call_next):
+        start = time.time()
+
+        result = await call_next(context)
+
+        elapsed = time.time() - start
+
+        await context.fastmcp_context.info(f"Tool took {elapsed:.2f} seconds")
+
+        return result
+
+
+mcp.add_middleware(TimingMiddleware())
+
+
+@mcp.tool
+async def add(a: int, b: int):
+    await asyncio.sleep(5)
+    return a + b
 
 
 # @asynccontextmanager

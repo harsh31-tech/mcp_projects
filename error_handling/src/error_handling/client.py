@@ -33,14 +33,19 @@ async def main():
     #     print(fast)
     # result = await asyncio.gather(slow,fast)
     # print(result)
+    # async with client:
+    #     prompts = await client.list_prompts()
+    #     print(prompts)
+
+    #     prompt = await client.get_prompt("analyze")
+    #     print(prompt)
+
     async with client:
-        prompts = await client.list_prompts()
-        print(prompts)
-        
-        prompt = await client.get_prompt("analyze")
-        print(prompt)
+        result = await client.call_tool("add", {"a": 10, "b": 10})
         
         
+
+        print(result)
 
 
 if __name__ == "__main__":
