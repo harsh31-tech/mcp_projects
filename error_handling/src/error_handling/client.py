@@ -39,6 +39,8 @@ async def main():
         
         prompt = await client.get_prompt("analyze")
         print(prompt)
+        
+        
 
 
 if __name__ == "__main__":
