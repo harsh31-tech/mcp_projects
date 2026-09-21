@@ -20,8 +20,33 @@ mcp = FastMCP(name="error-handling-server")
 #     return result
 
 
-class TimingMiddleware(Middleware):
+# class TimingMiddleware(Middleware): # this middle ware will apply in every tool
+#     async def on_call_tool(self, context, call_next):
+#         start = time.time()
+
+#         result = await call_next(context)
+
+#         elapsed = time.time() - start
+
+#         await context.fastmcp_context.info(f"Tool took {elapsed:.2f} seconds")
+
+#         return result
+
+
+# mcp.add_middleware(TimingMiddleware())
+
+
+class TimingMiddleware(
+    Middleware
+):  # this middle ware will apply only on selected tools only
+    def __init__(self, target_tools):
+        self.target_tools = target_tools
+
     async def on_call_tool(self, context, call_next):
+
+        if context.message.name not in self.target_tools:
+            return await call_next(context)
+
         start = time.time()
 
         result = await call_next(context)
@@ -33,7 +58,7 @@ class TimingMiddleware(Middleware):
         return result
 
 
-mcp.add_middleware(TimingMiddleware())
+mcp.add_middleware(TimingMiddleware(target_tools={"add"}))
 
 
 @mcp.tool
