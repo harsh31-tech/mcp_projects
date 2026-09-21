@@ -1,8 +1,21 @@
 from fastmcp import FastMCP, Context
+from fastmcp.server.middleware import Middleware
 from pydantic import BaseModel, EmailStr
 from enum import Enum
 from contextlib import asynccontextmanager
 import asyncio
+
+mcp = FastMCP(name="error-handling-server")
+
+
+async def middleware(context, call_next): #basic structure of creating middleware 
+    print("before")
+
+    result = await call_next(context)
+
+    print("after")
+
+    return result
 
 
 # @asynccontextmanager
@@ -14,33 +27,33 @@ import asyncio
 #     print("server is shutting down...")
 
 
-@asynccontextmanager
-async def lifespan(
-    server,
-):  # lifespan context is used to define and satrt thing before running the server which will not create lag or missing data
+# @asynccontextmanager
+# async def lifespan(
+#     server,
+# ):  # lifespan context is used to define and satrt thing before running the server which will not create lag or missing data
 
-    db = await connect_to_db()
+#     db = await connect_to_db()
 
-    http_client = create_http_client()
+#     http_client = create_http_client()
 
-    cache = {}
+#     cache = {}
 
-    yield {"db": db, "http": http_client, "cache": cache}
+#     yield {"db": db, "http": http_client, "cache": cache}
 
-    await db.close()
-    await http_client.close()
-
-
-@mcp.tool
-async def get_user(username: str, ctx: Context):
-    state = ctx.lifespan_context
-
-    db = state["db"]
-
-    print(db)
+#     await db.close()
+#     await http_client.close()
 
 
-mcp = FastMCP(name="error handling server", lifespan=lifespan)
+# @mcp.tool
+# async def get_user(username: str, ctx: Context):
+#     state = ctx.lifespan_context
+
+#     db = state["db"]
+
+#     print(db)
+
+
+# mcp = FastMCP(name="error handling server", lifespan=lifespan)
 # class Database(str, Enum):
 #     POSTGRES = "postgres"
 #     MYSQL = "mysql"
